@@ -41,15 +41,15 @@ for line in sys.stdin:
     try:
         if is_valid_line(line) is False:
             continue
-        counter += 1
         line_parts = line.rstrip().split()
         file_size = int(line_parts[-1])
         status_code = int(line_parts[-2])
         file_size_accum['total'] += file_size
 
-        if status_count.get(status_code):
+        if status_code in status_count:
             status_count[status_code] += 1
 
+        counter += 1
         if counter % 10 == 0:
             print_stats(status_count)
 
