@@ -4,6 +4,24 @@ Script that reads `stdin` and computes metrics.
 """
 import re
 import sys
+import signal
+
+
+counter = 0
+file_size_accum = {'total': 0}
+status_count = {
+    status_code: 0 for status_code in [
+        200, 301, 400, 401, 403, 404, 405, 500
+    ]
+}
+
+
+def signal_handler(sig, frame):
+    """
+    Signal handler for keyboard interruption (CTRL + C)
+    """
+    print_stats()
+    sys.exit(0)
 
 
 def is_valid_line(line):
@@ -21,7 +39,7 @@ def is_valid_line(line):
     return pattern.match(line)
 
 
-def print_stats(status_count):
+def print_stats():
     """
     Prints the statistics.
     """
@@ -31,27 +49,31 @@ def print_stats(status_count):
             print(f'{status_code}: {status_count[status_code]}')
 
 
-counter = 0
-file_size_accum = {'total': 0}
-status_count = {}
-for code in [200, 301, 400, 401, 403, 404, 405, 500]:
-    status_count[code] = 0
+signal.signal(signal.SIGINT, signal_handler)
 
-for line in sys.stdin:
-    try:
-        if is_valid_line(line) is False:
+try:
+    for line in sys.stdin:
+        try:
+            if is_valid_line(line) is False:
+                continue
+
+            line_parts = line.rstrip().split()
+            file_size = int(line_parts[-1])
+            status_code = int(line_parts[-2])
+            file_size_accum['total'] += file_size
+
+            if status_code in status_count:
+                status_count[status_code] += 1
+
+            counter += 1
+            if counter % 10 == 0:
+                print_stats()
+        except (IndexError, ValueError):
             continue
-        line_parts = line.rstrip().split()
-        file_size = int(line_parts[-1])
-        status_code = int(line_parts[-2])
-        file_size_accum['total'] += file_size
 
-        if status_code in status_count:
-            status_count[status_code] += 1
+    if counter % 10 != 0 or counter == 0:
+        print_stats()
 
-        counter += 1
-        if counter % 10 == 0:
-            print_stats(status_count)
-
-    except KeyboardInterrupt:
-        print_stats(status_count)
+except KeyboardInterrupt:
+    print_stats()
+    sys.exit(0)
