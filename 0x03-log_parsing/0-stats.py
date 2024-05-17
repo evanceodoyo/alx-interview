@@ -51,6 +51,7 @@ def print_stats():
 
 signal.signal(signal.SIGINT, signal_handler)
 
+
 try:
     for line in sys.stdin:
         try:
