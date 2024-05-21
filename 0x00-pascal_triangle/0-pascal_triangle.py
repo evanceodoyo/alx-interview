@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 """Implements Pascal's Triangle"""
 
-triangle = [[1], [1, 1]]
-
 
 def pascal_triangle(n):
     """
     Calculates and returns list of lists of integers representing
     Pascal's triangle of `n`.
     """
+    triangle = [[1], [1, 1]]
     if n <= 0:
         return []
 
