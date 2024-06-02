@@ -91,8 +91,8 @@ def main():
         print("N must be at least 4")
         sys.exit(1)
 
-    # queens = n_queens(N)
-    for q in n_queens(N):
+    queens = n_queens(N)
+    for q in queens:
         print(q)
 
 
