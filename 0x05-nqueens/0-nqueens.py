@@ -15,14 +15,14 @@ def n_queens(n: int):
 
     To solve the problem, keep track of the columns that already contain
     queens in a set.
-    Also keep track of the positive (bottom left to top right) [↗] and
-    negative diagonals (top left to bottom right) [↘] a queen is placed in:
+    Also keep track of the positive diagonal(bottom left to top right) [↗] and
+    negative diagonal (top left to bottom right) [↘] a queen is placed in:
       positive diagonals => row + col (is always a constant for each cell in a
         given diagonal line)
       negative diagonals => row - col (is always a constant for each cell in a
         given diagonal line)
 
-    For every row iteration, skip the column if it it contains a queen already.
+    For every row iteration, skip the column if it contains a queen already.
     On getting to the last row, if the queen is placed in a valid column,
     then solution is found (when row == n).
     Also skip if the given diagonal cell already exists in the
