@@ -11,16 +11,16 @@ def n_queens(n: int):
     Args:
       n (int): Number of queens
     Return:
-        List of valid queen positions.
+      List of valid queen positions.
 
     To solve the problem, keep track of the columns that already contain
     queens in a set.
     Also keep track of the positive diagonal(bottom left to top right) [↗] and
     negative diagonal (top left to bottom right) [↘] a queen is placed in:
-      positive diagonals => row + col (is always a constant for each cell in a
-        given diagonal line)
-      negative diagonals => row - col (is always a constant for each cell in a
-        given diagonal line)
+      - positive diagonals => row + col (is always a constant for each cell in
+        a given diagonal line)
+      - negative diagonals => row - col (is always a constant for each cell in
+        a given diagonal line)
 
     For every row iteration, skip the column if it contains a queen already.
     On getting to the last row, if the queen is placed in a valid column,
