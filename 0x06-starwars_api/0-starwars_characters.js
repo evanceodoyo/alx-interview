@@ -12,22 +12,21 @@ function printNames (movieId) {
       console.error(`Request failed with code ${response.statusCode}`);
     }
 
-    const data = JSON.parse(body);
-    const characters = data.characters;
+    const charactersURLs = JSON.parse(body).characters;
 
-    for (const personURL of characters) {
-      request(personURL, (error, response, body) => {
-        if (error) {
-          console.error(error);
-        }
-
-        if (response.statusCode !== 200) {
-          console.error(`Request failed with code ${response.statusCode}`);
-        }
-        const person = JSON.parse(body);
-        console.log(person.name);
-      });
-    }
+    const names = charactersURLs.map(
+      url => new Promise((resolve, reject) => {
+        request(url, (promiseError, resp, charReqBody) => {
+          if (promiseError) {
+            reject(promiseError);
+          }
+          resolve(JSON.parse(charReqBody).name);
+        });
+      })
+    );
+    Promise.all(names)
+      .then(names => console.log(names.join('\n')))
+      .catch(err => console.error(err));
   });
 }
 
