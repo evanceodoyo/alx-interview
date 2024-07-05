@@ -57,6 +57,3 @@ def isWinner(x, nums):
         return "Ben"
     else:
         return None
-
-
-print("Winner: {}".format(isWinner(3, [4, 5, 1])))
